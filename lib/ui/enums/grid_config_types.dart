@@ -1,0 +1,1 @@
+enum GridConfigTypes { CUSTOM, SMALL, MEDIUM, LARGE, EXTRA_LARGE }
