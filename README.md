@@ -30,15 +30,15 @@ The universe of the GoL is an infinite, two-dimensional orthogonal grid of squar
 This exercise is made to implement the Design Patterns learned. The taks that needs to be done are the following:
 
 1. Design:
-   a. Requirements and constraints.
-   b. Inputs/Outputs
-   c. High level Diagram of all the main objects.
-2. Architect
-   a. Class diagram and the design patterns used on the application
-   b. Abstract the UI layer so it can be swapped.
-3. Develop
-   a. Write the code for the application based on the architecture.
-   b. Document the code.
+   - Requirements and constraints.
+   - Inputs/Outputs
+   - High level Diagram of all the main objects.
+3. Architect
+   - Class diagram and the design patterns used on the application
+   - Abstract the UI layer so it can be swapped.
+4. Develop
+   - Write the code for the application based on the architecture.
+   - Document the code.
 
 # Solution
 
