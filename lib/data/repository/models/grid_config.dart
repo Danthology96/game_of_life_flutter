@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_of_life_exercise/ui/enums/grid_config_types.dart';
+import 'package:game_of_life_exercise/data/repository/enums/grid_config_types.dart';
 
 abstract class GridConfig {
   int _dimension = 0;
@@ -17,43 +17,43 @@ abstract class GridConfig {
     _gridType = type;
   }
 
-  void setConfig(int dimension, Color aliveColor, Color deadColor) {
+  void setConfig(int dimension, Color? aliveColor, Color? deadColor) {
     _dimension = dimension;
-    _aliveColor = aliveColor;
-    _deadColor = deadColor;
+    _aliveColor = aliveColor ?? _aliveColor;
+    _deadColor = deadColor ?? _deadColor;
   }
 }
 
 class SmallGridConfig extends GridConfig {
-  SmallGridConfig(Color aliveColor, Color deadColor) {
+  SmallGridConfig(Color? aliveColor, Color? deadColor) {
     setConfig(20, aliveColor, deadColor);
     setGridType = GridConfigTypes.SMALL;
   }
 }
 
 class MediumGridConfig extends GridConfig {
-  MediumGridConfig(Color aliveColor, Color deadColor) {
+  MediumGridConfig(Color? aliveColor, Color? deadColor) {
     setConfig(30, aliveColor, deadColor);
     setGridType = GridConfigTypes.MEDIUM;
   }
 }
 
 class LargeGridConfig extends GridConfig {
-  LargeGridConfig(Color aliveColor, Color deadColor) {
+  LargeGridConfig(Color? aliveColor, Color? deadColor) {
     setConfig(40, aliveColor, deadColor);
     setGridType = GridConfigTypes.LARGE;
   }
 }
 
 class ExtraLargeGridConfig extends GridConfig {
-  ExtraLargeGridConfig(Color aliveColor, Color deadColor) {
+  ExtraLargeGridConfig(Color? aliveColor, Color? deadColor) {
     setConfig(50, aliveColor, deadColor);
     setGridType = GridConfigTypes.EXTRA_LARGE;
   }
 }
 
 class CustomGridConfig extends GridConfig {
-  CustomGridConfig(int dimension, Color aliveColor, Color deadColor) {
+  CustomGridConfig(int dimension, Color? aliveColor, Color? deadColor) {
     setConfig(dimension, aliveColor, deadColor);
     setGridType = GridConfigTypes.CUSTOM;
   }

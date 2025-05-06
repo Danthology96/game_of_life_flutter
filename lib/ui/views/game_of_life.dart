@@ -1,7 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:game_of_life_exercise/ui/enums/cell_status.dart';
+import 'package:game_of_life_exercise/data/repository/enums/cell_status.dart';
+import 'package:game_of_life_exercise/data/repository/models/grid_config_factory.dart';
+import 'package:game_of_life_exercise/view_model/game_logic.dart';
 
 class GameOfLife extends StatefulWidget {
   const GameOfLife({super.key});
@@ -11,93 +11,43 @@ class GameOfLife extends StatefulWidget {
 }
 
 class GameOfLifeState extends State<GameOfLife> {
-  late List<List<CellStatus>> _grid;
-  late int _rows;
-  late int _columns;
-  late int _generation;
-  late Random genLife = Random();
+  late GameLogic gameLogic;
 
+  GridConfigContext gridConfigContext = GridConfigContext.custom(
+    dimension: 10,
+    aliveColor: Colors.deepOrange,
+    deadColor: Colors.white,
+  );
   @override
   void initState() {
     super.initState();
-    _rows = 30;
-    _columns = 30;
-    _generation = 0;
-    _initGrid();
-  }
-
-  void _initGrid() {
-    _grid = List.generate(_rows, (_) => List.filled(_columns, CellStatus.DEAD));
-    for (int i = 0; i < _rows; i++) {
-      for (int j = 0; j < _columns; j++) {
-        _grid[i][j] = genLife.nextBool() ? CellStatus.ALIVE : CellStatus.DEAD;
-      }
-    }
-  }
-
-  int _countAliveNeighbors(int row, int column) {
-    int count = 0;
-    for (int i = -1; i <= 1; i++) {
-      for (int j = -1; j <= 1; j++) {
-        if (i == 0 && j == 0) continue;
-        int r = row + i;
-        int c = column + j;
-        if (r >= 0 &&
-            r < _rows &&
-            c >= 0 &&
-            c < _columns &&
-            _grid[r][c] == CellStatus.ALIVE) {
-          count++;
-        }
-      }
-    }
-    return count;
+    gameLogic = GameLogic.fromConfig(
+      GridConfigFactory.createGridConfig(gridConfigContext),
+    );
   }
 
   void _tick() {
     setState(() {
-      _generation++;
-      List<List<CellStatus>> nextGrid = List.generate(
-        _rows,
-        (_) => List.filled(_columns, CellStatus.DEAD),
-      );
-      for (int i = 0; i < _rows; i++) {
-        for (int j = 0; j < _columns; j++) {
-          int neighbors = _countAliveNeighbors(i, j);
-          if (_grid[i][j] == CellStatus.ALIVE) {
-            if (neighbors == 2 || neighbors == 3) {
-              nextGrid[i][j] = CellStatus.ALIVE;
-            } else {
-              nextGrid[i][j] = CellStatus.DEAD;
-            }
-          } else {
-            if (neighbors == 3) {
-              nextGrid[i][j] = CellStatus.ALIVE;
-            } else {
-              nextGrid[i][j] = CellStatus.DEAD;
-            }
-          }
-        }
-      }
-      _grid = nextGrid;
+      gameLogic.tick();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final int dimension = gameLogic.gridConfig.dimension;
     return Scaffold(
-      appBar: AppBar(title: Text('Generation: $_generation')),
+      appBar: AppBar(title: Text('Generation: ${gameLogic.generation}')),
       body: GridView.count(
-        crossAxisCount: _columns,
-        children: List.generate(_rows * _columns, (index) {
-          int row = index ~/ _columns;
-          int column = index % _columns;
+        crossAxisCount: dimension,
+        children: List.generate(dimension * dimension, (index) {
+          int row = index ~/ dimension;
+          int column = index % dimension;
           return Container(
             decoration: BoxDecoration(
               color:
-                  _grid[row][column] == CellStatus.ALIVE
-                      ? Colors.black
-                      : Colors.white,
+                  gameLogic.grid[row][column] == CellStatus.ALIVE
+                      ? gameLogic.gridConfig.aliveColor
+                      : gameLogic.gridConfig.deadColor,
               border: Border.all(color: Colors.grey),
             ),
           );
