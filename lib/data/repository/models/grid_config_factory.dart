@@ -1,32 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:game_of_life_exercise/data/repository/enums/grid_config_types.dart';
-import 'package:game_of_life_exercise/data/repository/models/grid_config.dart';
+
+import '../enums/game_of_life_enums.dart';
+import 'grid_config.dart';
 
 class GridConfigFactory {
   GridConfigFactory._(); // Private constructor to prevent instantiation
 
   static GridConfig createGridConfig(GridConfigContext context) {
-    switch (context.gridType) {
-      case GridConfigTypes.SMALL:
-        return SmallGridConfig(context.aliveColor, context.deadColor);
-      case GridConfigTypes.MEDIUM:
-        return MediumGridConfig(context.aliveColor, context.deadColor);
-      case GridConfigTypes.LARGE:
-        return LargeGridConfig(context.aliveColor, context.deadColor);
-      case GridConfigTypes.EXTRA_LARGE:
-        return ExtraLargeGridConfig(context.aliveColor, context.deadColor);
-      case GridConfigTypes.CUSTOM:
-        return CustomGridConfig(
-          context.dimension!,
-          context.aliveColor,
-          context.deadColor,
-        );
-    }
+    return switch (context.gridType) {
+      GridConfigType.SMALL => SmallGridConfig(
+        context.aliveColor,
+        context.deadColor,
+      ),
+      GridConfigType.MEDIUM => MediumGridConfig(
+        context.aliveColor,
+        context.deadColor,
+      ),
+      GridConfigType.LARGE => LargeGridConfig(
+        context.aliveColor,
+        context.deadColor,
+      ),
+      GridConfigType.EXTRA_LARGE => ExtraLargeGridConfig(
+        context.aliveColor,
+        context.deadColor,
+      ),
+      GridConfigType.CUSTOM => CustomGridConfig(
+        context.dimension!,
+        context.aliveColor,
+        context.deadColor,
+      ),
+    };
   }
 }
 
 class GridConfigContext {
-  final GridConfigTypes gridType;
+  final GridConfigType gridType;
 
   final int? dimension;
   final Color? aliveColor;
@@ -40,32 +48,32 @@ class GridConfigContext {
   });
 
   factory GridConfigContext.defaultConfig() =>
-      GridConfigContext._(gridType: GridConfigTypes.MEDIUM);
+      GridConfigContext._(gridType: GridConfigType.MEDIUM);
 
   factory GridConfigContext.small({Color? aliveColor, Color? deadColor}) =>
       GridConfigContext._(
-        gridType: GridConfigTypes.SMALL,
+        gridType: GridConfigType.SMALL,
         aliveColor: aliveColor,
         deadColor: deadColor,
       );
 
   factory GridConfigContext.medium({Color? aliveColor, Color? deadColor}) =>
       GridConfigContext._(
-        gridType: GridConfigTypes.MEDIUM,
+        gridType: GridConfigType.MEDIUM,
         aliveColor: aliveColor,
         deadColor: deadColor,
       );
 
   factory GridConfigContext.large({Color? aliveColor, Color? deadColor}) =>
       GridConfigContext._(
-        gridType: GridConfigTypes.LARGE,
+        gridType: GridConfigType.LARGE,
         aliveColor: aliveColor,
         deadColor: deadColor,
       );
 
   factory GridConfigContext.extraLarge({Color? aliveColor, Color? deadColor}) =>
       GridConfigContext._(
-        gridType: GridConfigTypes.EXTRA_LARGE,
+        gridType: GridConfigType.EXTRA_LARGE,
         aliveColor: aliveColor,
         deadColor: deadColor,
       );
@@ -75,7 +83,7 @@ class GridConfigContext {
     Color? aliveColor,
     required Color deadColor,
   }) => GridConfigContext._(
-    gridType: GridConfigTypes.CUSTOM,
+    gridType: GridConfigType.CUSTOM,
     aliveColor: aliveColor,
     deadColor: deadColor,
     dimension: dimension,

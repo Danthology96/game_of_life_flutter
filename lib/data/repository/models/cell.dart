@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_of_life_exercise/data/repository/enums/cell_status.dart';
+import 'package:game_of_life_exercise/data/repository/enums/game_of_life_enums.dart';
 
 abstract class Cell {
   int posX = 0;
