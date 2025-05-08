@@ -6,10 +6,10 @@ import 'package:game_of_life_exercise/view_model/observer.dart';
 class GenerationTimer implements Subject, GameController {
   static final GenerationTimer _instance = GenerationTimer._internal();
 
-  Timer? timer;
+  Timer? _timer;
   final List<Observer> _observers = [];
 
-  bool get isActive => timer != null && timer!.isActive;
+  bool get isActive => _timer != null && _timer!.isActive;
 
   factory GenerationTimer() {
     return _instance;
@@ -37,8 +37,8 @@ class GenerationTimer implements Subject, GameController {
 
   @override
   void playGame() {
-    if (timer == null || !timer!.isActive) {
-      timer = Timer.periodic(const Duration(milliseconds: 500), (_) {
+    if (_timer == null || !_timer!.isActive) {
+      _timer = Timer.periodic(const Duration(milliseconds: 500), (_) {
         notifyObservers();
       });
     }
@@ -46,23 +46,23 @@ class GenerationTimer implements Subject, GameController {
 
   @override
   void pauseGame() {
-    if (timer != null && timer!.isActive) {
-      timer!.cancel();
-      timer = null;
+    if (_timer != null && _timer!.isActive) {
+      _timer!.cancel();
+      _timer = null;
     }
   }
 
   @override
   void resetGame() {
-    timer?.cancel();
-    timer = null;
+    _timer?.cancel();
+    _timer = null;
     notifyObservers();
   }
 
   @override
   void stopGame() {
-    timer?.cancel();
-    timer = null;
+    _timer?.cancel();
+    _timer = null;
     notifyObservers();
   }
 }

@@ -13,12 +13,12 @@ class GameOfLife extends StatefulWidget {
 }
 
 class GameOfLifeState extends State<GameOfLife> {
-  late GameLogic gameLogic;
+  late GameLogic _gameLogic;
   late GenerationTimer _gameTimer;
   late TimerObserver _timerObserver;
   GameState _gameState = GameState.STOPPED;
 
-  GridConfigContext gridConfigContext = GridConfigContext.custom(
+  final GridConfigContext _gridConfigContext = GridConfigContext.custom(
     dimension: 10,
     aliveColor: Colors.deepOrange,
     deadColor: Colors.white,
@@ -32,8 +32,8 @@ class GameOfLifeState extends State<GameOfLife> {
 
     _gameTimer.attachObserver(_timerObserver);
 
-    gameLogic = GameLogic.fromConfig(
-      GridConfigFactory.createGridConfig(gridConfigContext),
+    _gameLogic = GameLogic.fromConfig(
+      GridConfigFactory.createGridConfig(_gridConfigContext),
       _gameTimer,
     );
   }
@@ -47,15 +47,15 @@ class GameOfLifeState extends State<GameOfLife> {
 
   void _tick() {
     setState(() {
-      gameLogic.createNextGen();
+      _gameLogic.createNextGen();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final int dimension = gameLogic.gridConfig.dimension;
+    final int dimension = _gameLogic.gridConfig.dimension;
     return Scaffold(
-      appBar: AppBar(title: Text('Generation: ${gameLogic.generation}')),
+      appBar: AppBar(title: Text('Generation: ${_gameLogic.generation}')),
       body: Column(
         children: [
           Expanded(
@@ -67,9 +67,9 @@ class GameOfLifeState extends State<GameOfLife> {
                 return Container(
                   decoration: BoxDecoration(
                     color:
-                        gameLogic.grid[row][column] == CellStatus.ALIVE
-                            ? gameLogic.gridConfig.aliveColor
-                            : gameLogic.gridConfig.deadColor,
+                        _gameLogic.grid[row][column] == CellStatus.ALIVE
+                            ? _gameLogic.gridConfig.aliveColor
+                            : _gameLogic.gridConfig.deadColor,
                     border: Border.all(color: Colors.grey),
                   ),
                 );
@@ -83,7 +83,7 @@ class GameOfLifeState extends State<GameOfLife> {
                 onPressed: () {
                   setState(() {
                     _gameState = GameState.STOPPED;
-                    gameLogic.resetGame();
+                    _gameLogic.resetGame();
                   });
                 },
                 child: const Text('Reset'),
@@ -93,7 +93,7 @@ class GameOfLifeState extends State<GameOfLife> {
                 onPressed: () {
                   setState(() {
                     _gameState = GameState.PLAYING;
-                    gameLogic.playGame();
+                    _gameLogic.playGame();
                   });
                 },
                 child: const Text('Play'),
@@ -103,7 +103,7 @@ class GameOfLifeState extends State<GameOfLife> {
                 onPressed: () {
                   setState(() {
                     _gameState = GameState.PAUSED;
-                    gameLogic.pauseGame();
+                    _gameLogic.pauseGame();
                   });
                 },
                 child: const Text('Pause'),
@@ -114,7 +114,7 @@ class GameOfLifeState extends State<GameOfLife> {
                 onPressed: () {
                   setState(() {
                     _gameState = GameState.STOPPED;
-                    gameLogic.stopGame();
+                    _gameLogic.stopGame();
                   });
                 },
                 child: const Text('Stop'),
